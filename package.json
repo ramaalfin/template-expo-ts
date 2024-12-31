@@ -1,0 +1,31 @@
+{
+  "name": "template-ts",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "@expo-google-fonts/poppins": "^0.2.3",
+    "@react-native-async-storage/async-storage": "^2.1.0",
+    "@react-navigation/stack": "^7.0.11",
+    "axios": "^1.7.8",
+    "expo": "~52.0.11",
+    "expo-checkbox": "^4.0.0",
+    "expo-router": "^4.0.9",
+    "expo-status-bar": "~2.0.0",
+    "react": "18.3.1",
+    "react-native": "0.76.3",
+    "react-native-flexbox-grid": "^0.3.2",
+    "react-native-responsive-screen": "^1.4.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@types/react": "~18.3.12",
+    "typescript": "^5.3.3"
+  },
+  "private": true
+}
