@@ -3,6 +3,7 @@ import {
   Dimensions,
   Image,
   Modal,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -33,6 +34,7 @@ const { width } = Dimensions.get("window");
 
 import { NavigationProp } from "@react-navigation/native";
 import { useRouter } from "expo-router";
+import InputBox from "../components/Forms/InputBox";
 
 const HomeScreen = ({ navigation }: { navigation: NavigationProp<any> }) => {
   const { user, logout } = useAuth();
@@ -67,7 +69,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationProp<any> }) => {
         if (photo) {
           setPhoto({ uri: photo });
         } else {
-          setPhoto(require("../assets/nophoto.jpg"));
+          setPhoto(require("../assets/user.png"));
         }
       }
     } catch (error) {
@@ -124,13 +126,12 @@ const HomeScreen = ({ navigation }: { navigation: NavigationProp<any> }) => {
 
   return (
     <View style={styles.container}>
-      <ImageBackground
-        source={require("../assets/bg_presensi.png")}
+      <View
         style={styles.bio}
       >
         <View style={styles.topBar}>
           <Image
-            source={require("../assets/images/logo.png")}
+            source={require("../assets/icon-white.png")}
             resizeMode="contain"
             style={{ width: 50 }}
           />
@@ -150,11 +151,11 @@ const HomeScreen = ({ navigation }: { navigation: NavigationProp<any> }) => {
             <Text
               style={{
                 color: "white",
+                fontFamily: "Poppins_500Medium",
                 fontSize: 16,
-                fontFamily: "Poppins_700Bold",
               }}
             >
-              {/* {user?.fid} */}
+              Adi Kurnia
             </Text>
             <Text
               style={{
@@ -163,44 +164,118 @@ const HomeScreen = ({ navigation }: { navigation: NavigationProp<any> }) => {
                 fontFamily: "Poppins_400Regular",
               }}
             >
-              NISN:
-            </Text>
-            <Text
-              style={{
-                color: "white",
-                fontSize: 13,
-                fontFamily: "Poppins_400Regular",
-              }}
-            >
-              NIS:
+              NIK: 3271060100000001
             </Text>
           </View>
         </View>
 
-        <View
+      </View>
+
+      {/* form */}
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: "white",
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+          padding: 20,
+          marginTop: -80,
+        }}
+      >
+        {/* no pengajuan */}
+        <ScrollView
           style={{
-            backgroundColor: "white",
-            borderTopLeftRadius: 20,
-            borderTopRightRadius: 20,
-            padding: 20,
+            flex: 1,
+            height: hp("100%")
           }}
         >
-          <View
-            style={{
-              backgroundColor: "#F1F5F9",
-              borderRadius: 10,
-              padding: 10,
-              alignItems: "center",
-              marginBottom: 10,
-            }}
-          >
-            <Text style={{ fontFamily: "Poppins_400Regular", fontSize: 13 }}>
-              Lihat perkembangan belajar anak
-            </Text>
-          </View>
-        </View>
-      </ImageBackground>
+          <InputBox
+            inputTitle="No Pengajuan"
+            value="1234567890"
+            editable={false}
+          />
+          <InputBox
+            inputTitle="No CIF"
+            style={{ marginTop: 20 }}
+            value="1234567890"
+            editable={false}
+          />
+          {/* nama lengkap */}
+          <InputBox
+            inputTitle="Nama Lengkap"
+            style={{ marginTop: 20 }}
+            value="Adi Kurnia"
+            editable={false}
+          />
+          {/* nominal type number */}
+          <InputBox
+            inputTitle="Nominal"
+            style={{ marginTop: 20 }}
+            value={`Rp. 1.000.000.000`}
+            type="numeric"
+            editable={false}
+          />
+          {/* catatan */}
+          <InputBox
+            inputTitle="Catatan"
+            style={{ marginTop: 20 }}
+            multiline={true}
+          />
 
+          {/* input file */}
+          <View style={{ marginTop: 20, flexDirection: "row", gap: 10, alignItems: "center" }}>
+            <Text style={{ fontFamily: "Poppins_500Medium" }}>Lampiran</Text>
+            <View style={{ flexDirection: "row", width: "100%" }}>
+              <Pressable
+                style={{
+                  backgroundColor: "#C0151B",
+                  paddingVertical: 4,
+                  paddingHorizontal: 10,
+                  borderRadius: 5,
+                  width: "30%",
+                }}
+              >
+                <Text
+                  style={{
+                    fontFamily: "Poppins_600SemiBold",
+                    fontSize: 12,
+                    textAlign: "center",
+                    color: "white",
+                  }}
+                >
+                  Pilih File
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+
+          {/* button submit */}
+          <View style={{ flexDirection: "row", width: "100%", marginTop: 20 }}>
+            <Pressable
+              style={{
+                backgroundColor: "#C0151B",
+                paddingVertical: 8,
+                paddingHorizontal: 10,
+                borderRadius: 5,
+                width: "100%",
+              }}
+            >
+              <Text
+                style={{
+                  fontFamily: "Poppins_600SemiBold",
+                  fontSize: 14,
+                  textAlign: "center",
+                  color: "white",
+                }}
+              >
+                Submit
+              </Text>
+            </Pressable>
+          </View>
+        </ScrollView>
+      </View>
+
+      {/* modal info */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -225,7 +300,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationProp<any> }) => {
             >
               <Pressable
                 style={{
-                  backgroundColor: "#CC347D",
+                  backgroundColor: "#C0151B",
                   paddingVertical: 8,
                   paddingHorizontal: 10,
                   borderRadius: 5,
@@ -259,7 +334,7 @@ const HomeScreen = ({ navigation }: { navigation: NavigationProp<any> }) => {
                     fontFamily: "Poppins_600SemiBold",
                     fontSize: 14,
                     textAlign: "center",
-                    color: "#CC347D",
+                    color: "#C0151B",
                   }}
                 >
                   Ya
@@ -288,12 +363,16 @@ const styles = StyleSheet.create({
     marginVertical: hp("1%"),
     height: hp("8%"),
   },
-  bio: { height: hp("40%") },
+  bio: {
+    height: hp("35%"),
+    backgroundColor: "#C0151B"
+  },
   bioContent: {
     flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: 20,
     gap: 20,
-    marginVertical: hp("4%"),
+    marginVertical: hp("1%"),
   },
   cardMenu: {
     height: 100,
@@ -327,14 +406,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+    backgroundColor: "rgba(0,0,0,0.2)",
+    width: "100%",
+    maxWidth: Platform.OS === "web" ? 400 : "100%",
+    alignSelf: "center",
+    zIndex: 9999,
   },
-
   modalView: {
-    margin: 30,
+    margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 20,
+    padding: 15,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {

@@ -1,16 +1,18 @@
 import { StyleSheet, Text, TextInput, View } from "react-native";
 
-export default function InputBox({ inputTitle, value, setValue, type }: any) {
+export default function InputBox({ inputTitle, value, setValue, type, style, styleInput, styleLabel, editable, multiline }: any) {
   return (
-    <View>
-      <Text style={{ fontFamily: "Poppins_500Medium" }}>{inputTitle}</Text>
+    <View style={style}>
+      <Text style={[styleLabel, { fontFamily: "Poppins_500Medium" }]}>{inputTitle}</Text>
       {/* tidak bisa menginput spasi  */}
       <TextInput
-        style={styles.textInput}
+        style={[styles.textInput, styleInput]}
         autoCorrect={false}
         value={value}
         onChangeText={(text) => setValue(text)}
         keyboardType={type}
+        multiline={false}
+        editable={editable}
       />
     </View>
   );

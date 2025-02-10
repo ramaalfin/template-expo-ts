@@ -4,7 +4,7 @@ import { StyleSheet, Text, TextInput, View } from "react-native";
 // icons
 import { Feather } from "@expo/vector-icons";
 
-export default function InputPassword({ labelPassword, value, setValue }: any) {
+export default function InputPassword({ labelPassword, value, setValue, styleInput, styleLabel }: any) {
   // const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => {
@@ -13,10 +13,10 @@ export default function InputPassword({ labelPassword, value, setValue }: any) {
 
   return (
     <View>
-      <Text style={{ fontFamily: "Poppins_500Medium" }}>{labelPassword}</Text>
+      <Text style={[{ fontFamily: "Poppins_500Medium" }, styleLabel]}>{labelPassword}</Text>
       <View style={styles.password}>
         <TextInput
-          style={styles.textInput}
+          style={[styles.textInput, styleInput]}
           secureTextEntry={!showPassword}
           value={value}
           onChangeText={(text) => setValue(text)}
@@ -27,14 +27,14 @@ export default function InputPassword({ labelPassword, value, setValue }: any) {
             <Feather
               name="eye"
               size={20}
-              color="black"
+              color="white"
               onPress={togglePasswordVisibility}
             />
           ) : (
             <Feather
               name="eye-off"
               size={20}
-              color="black"
+              color="white"
               onPress={togglePasswordVisibility}
             />
           )}

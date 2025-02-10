@@ -14,8 +14,9 @@ interface AuthContextType {
         menu: any;
         token: string;
     };
-    login: (username: string, password: string) => Promise<void>;
     logout: () => Promise<void>;
+    setUser: (user: any) => void;
+    setAuthenticated: (authenticated: boolean) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -43,18 +44,6 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         loadAuthData();
     }, []);
 
-    const login = async (username: string, password: string) => {
-        const response = await loginUser(username, password);
-
-        if (response.data.status === "00") {
-            await AsyncStorage.setItem("user", JSON.stringify(response.data.data));
-            setUser(response.data.data);
-            setAuthenticated(true);
-        } else {
-            setAuthenticated(false);
-        }
-    }
-
     const logout = async () => {
         await AsyncStorage.removeItem("user");
         setAuthenticated(false);
@@ -64,8 +53,9 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         <AuthContext.Provider value={{
             authenticated,
             user,
-            login,
-            logout
+            logout,
+            setAuthenticated,
+            setUser
         }}>
             {children}
         </AuthContext.Provider>

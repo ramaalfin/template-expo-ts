@@ -6,6 +6,8 @@ import {
   Alert,
   Modal,
   Pressable,
+  TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 
@@ -19,11 +21,10 @@ import { loginUser } from "../services/auth";
 import Checkbox from "expo-checkbox";
 import InputBox from "../components/Forms/InputBox";
 import InputPassword from "../components/Forms/InputPassword";
-import SubmitButton from "../components/Forms/SubmitButton";
 import { useAuth } from "../context/AuthContext";
 
 const LoginScreen = ({ navigation }: any) => {
-  const { login } = useAuth();
+  const { setUser, setAuthenticated } = useAuth();
   const [isChecked, setChecked] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -75,11 +76,23 @@ const LoginScreen = ({ navigation }: any) => {
         await AsyncStorage.setItem("rememberedUsername", username);
       }
 
-      login(username, password);
+      const response = await loginUser(username, password);
+
+      if (response.data.status === "00") {
+        await AsyncStorage.setItem("user", JSON.stringify(response.data.data));
+        setUser(response.data.data);
+        setAuthenticated(true);
+      } else {
+        setAuthenticated(false);
+        setModalVisible(true);
+        setError(response.data.message);
+      }
     } catch (error) {
       setLoading(false);
       setError("Terjadi kesalahan, silahkan coba lagi");
       setModalVisible(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -88,7 +101,7 @@ const LoginScreen = ({ navigation }: any) => {
       <Image
         style={styles.logo}
         resizeMode="contain"
-        source={require("../assets/images/logo_login.png")}
+        source={require("../assets/icon-white.png")}
       />
 
       <View style={styles.formContainer}>
@@ -101,6 +114,8 @@ const LoginScreen = ({ navigation }: any) => {
               AsyncStorage.setItem("rememberedUsername", value); // Update stored username when typing
             }
           }}
+          styleInput={{ borderColor: "#fff", color: "#fff" }}
+          styleLabel={{ color: "#fff" }}
         />
 
         <InputPassword
@@ -108,6 +123,8 @@ const LoginScreen = ({ navigation }: any) => {
           togglePasswordVisibility={togglePasswordVisibility}
           value={password}
           setValue={setPassword}
+          styleInput={{ borderColor: "#fff", color: "#fff" }}
+          styleLabel={{ color: "#fff" }}
         />
 
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
@@ -116,15 +133,30 @@ const LoginScreen = ({ navigation }: any) => {
               style={styles.checkbox}
               value={isChecked}
               onValueChange={handleCheckboxToggle}
-              color={isChecked ? "#CC347D" : undefined}
+              color={isChecked ? "#C0151B" : undefined}
             />
-            <Text style={{ marginLeft: 5, fontFamily: "Poppins_400Regular" }}>
+            <Text style={{ marginLeft: 5, fontFamily: "Poppins_400Regular", color: "#fff" }}>
               Ingat Saya
             </Text>
           </View>
         </View>
 
-        <SubmitButton loading={loading} handleSubmit={handleSubmit} />
+        <View style={{ marginTop: 50 }}>
+          <TouchableOpacity
+            style={{ backgroundColor: "#fff", padding: 15, borderRadius: 30 }}
+            onPress={handleSubmit}
+            disabled={loading}
+          >
+            <Text style={{ color: "#C0151B", textAlign: "center", fontFamily: "Poppins_500Medium" }}>
+              {
+                loading ?
+                  <ActivityIndicator color="#C0151B" />
+                  :
+                  "Masuk"
+              }
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <Modal
@@ -150,7 +182,7 @@ const LoginScreen = ({ navigation }: any) => {
             <View style={{ flexDirection: "row", width: "100%" }}>
               <Pressable
                 style={{
-                  backgroundColor: "#CC347D",
+                  backgroundColor: "#C0151B",
                   paddingVertical: 8,
                   paddingHorizontal: 10,
                   borderRadius: 5,
@@ -184,7 +216,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "#C0151B",
   },
   logo: {
     width: 200,
@@ -199,7 +231,7 @@ const styles = StyleSheet.create({
   textInput: {
     fontFamily: "Poppins_400Regular",
     borderWidth: 1,
-    borderColor: "#979797",
+    borderColor: "#fff",
     borderRadius: 5,
     width: "100%",
     marginTop: 10,
@@ -213,7 +245,7 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   checkbox: {
-    borderColor: "#979797",
+    borderColor: "#fff",
   },
 
   centeredView: {
